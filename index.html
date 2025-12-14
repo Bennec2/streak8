@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Streak8</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              felt: '#0f3a25',
+              'felt-light': '#1b5e3c',
+              gold: '#ffd700',
+              'gold-dark': '#b8860b',
+            },
+            animation: {
+              'flip': 'flip 0.6s ease-in-out',
+              'flip-in': 'flip-in 0.6s ease-out',
+              'bounce-small': 'bounce-small 1s infinite',
+              'slide-x': 'slide-x 0.8s ease-in-out',
+              'shimmer': 'shimmer 2s linear infinite',
+              'spin-fall': 'spin-fall 0.8s ease-in forwards',
+              'pop-in': 'pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            },
+            keyframes: {
+              flip: {
+                '0%': { transform: 'rotateY(0deg)' },
+                '100%': { transform: 'rotateY(180deg)' },
+              },
+              'flip-in': {
+                '0%': { transform: 'perspective(1000px) rotateY(90deg)', opacity: '0' },
+                '100%': { transform: 'perspective(1000px) rotateY(0deg)', opacity: '1' },
+              },
+              'bounce-small': {
+                '0%, 100%': { transform: 'translateY(-5%)' },
+                '50%': { transform: 'translateY(0)' },
+              },
+              'slide-x': {
+                '0%, 100%': { transform: 'translateX(0)' },
+                '50%': { transform: 'translateX(20px)' },
+              },
+              shimmer: {
+                '0%': { transform: 'translateX(-100%)' },
+                '100%': { transform: 'translateX(100%)' }
+              },
+              'spin-fall': {
+                '0%': { transform: 'rotate(0deg) translateY(0)', opacity: '1' },
+                '20%': { transform: 'rotate(-5deg) translateY(-40px)', opacity: '1' },
+                '100%': { transform: 'rotate(720deg) translateY(120vh)', opacity: '0' }
+              },
+              'pop-in': {
+                '0%': { transform: 'scale(0)', opacity: '0' },
+                '60%': { transform: 'scale(1.2)', opacity: '1' },
+                '100%': { transform: 'scale(1)', opacity: '1' }
+              }
+            }
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      
+      .casino-font {
+        font-family: 'Playfair Display', serif;
+      }
+
+      /* Base card back styles for pattern reuse */
+      .card-pattern {
+         background-size: 20px 20px;
+         background-position: center;
+      }
+
+      /* Standard Card Back - Matching the image (Dark Blue with Indigo/Lighter pattern) */
+      .card-back {
+        background: 
+            radial-gradient(circle, #3730a3 2px, transparent 2.5px) 0 0,
+            radial-gradient(circle, #3730a3 2px, transparent 2.5px) 10px 10px;
+        background-color: #1e1b4b; /* slate-950/indigo-950 tone */
+        background-size: 20px 20px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      }
+
+      .card-back-jackpot {
+        background: 
+            radial-gradient(circle, #991b1b 2px, transparent 2.5px) 0 0,
+            radial-gradient(circle, #991b1b 2px, transparent 2.5px) 10px 10px;
+        background-color: #450a0a;
+        background-size: 20px 20px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      }
+
+      .card-back-gold {
+         background: 
+            linear-gradient(135deg, #a16207 25%, transparent 25%) -10px 0,
+            linear-gradient(225deg, #a16207 25%, transparent 25%) -10px 0,
+            linear-gradient(315deg, #a16207 25%, transparent 25%),
+            linear-gradient(45deg, #a16207 25%, transparent 25%);
+        background-size: 20px 20px;
+        background-color: #ca8a04;
+        box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 10px rgba(234, 179, 8, 0.5);
+      }
+      
+      .animate-spin-fall {
+        animation: spin-fall 0.8s ease-in forwards;
+        animation-delay: 0.6s; /* Slight delay so user sees the card first */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-slate-900 text-white overflow-x-hidden">
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "name": "Streak8",
+  "description": "A casino-style card game where players predict higher or lower to advance. Survive the first 4 cards to enter the high-stakes Jackpot Run.",
+  "requestFramePermissions": []
+}
