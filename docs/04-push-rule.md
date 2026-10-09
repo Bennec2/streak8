@@ -13,6 +13,8 @@ push: neither a win nor a loss.
 - Because tiers are percentages of the *current* jackpot, a push shrinks every
   remaining payout on the board; the per-slot potential-win readouts update
   live.
+- A push on the 8th and final card clears the board: it counts as a victory
+  at the halved jackpot (there is no 9th card to advance to).
 
 ## Rationale
 Ties are dead cards in higher/lower; halving the jackpot turns them into
@@ -21,3 +23,4 @@ meaningful events that deflate the run's stakes instead of just wasting a card.
 ## Open question
 Is halving too punishing for a tie, or should pushes carry a smaller penalty
 (e.g. −25%)?
+
