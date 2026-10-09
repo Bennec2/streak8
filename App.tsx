@@ -238,8 +238,28 @@ const App: React.FC = () => {
       // Reduce by 50% and round to 100
       const nextJackpot = roundTo100(jackpot / 2);
       setJackpot(nextJackpot);
-      setCurrentIndex(prev => prev + 1);
-      // Pushes continue immediately
+      if (currentIndex === TOTAL_CARDS - 1) {
+        // A push on the final card still clears the whole board: victory at
+        // the halved jackpot. (Otherwise the board index would run past the
+        // last slot and the round could never end.)
+        setIsProcessing(true);
+        setTimeout(() => {
+          setIsProcessing(false);
+          setPhase(GamePhase.VICTORY);
+          setBalance(prev => prev + nextJackpot);
+          setMessage("JACKPOT!");
+          setSubMessage(`You won ${formatCurrency(nextJackpot)}`);
+
+          // Increase jackpot range for next round
+          setJackpotRange(prev => ({
+            min: roundTo100(prev.min + 500),
+            max: roundTo100(prev.max + 1000)
+          }));
+        }, 1500);
+      } else {
+        setCurrentIndex(prev => prev + 1);
+        // Pushes continue immediately
+      }
     } else {
       const guessedCorrectly = (guess === Guess.HIGHER && isHigher) || (guess === Guess.LOWER && isLower);
       const isJackpotRun = currentIndex >= 4;
