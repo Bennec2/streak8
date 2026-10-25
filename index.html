@@ -1,129 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Streak8</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              felt: '#0f3a25',
-              'felt-light': '#1b5e3c',
-              gold: '#ffd700',
-              'gold-dark': '#b8860b',
-            },
-            animation: {
-              'flip': 'flip 0.6s ease-in-out',
-              'flip-in': 'flip-in 0.6s ease-out',
-              'bounce-small': 'bounce-small 1s infinite',
-              'slide-x': 'slide-x 0.8s ease-in-out',
-              'shimmer': 'shimmer 2s linear infinite',
-              'spin-fall': 'spin-fall 0.8s ease-in forwards',
-              'pop-in': 'pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-            },
-            keyframes: {
-              flip: {
-                '0%': { transform: 'rotateY(0deg)' },
-                '100%': { transform: 'rotateY(180deg)' },
-              },
-              'flip-in': {
-                '0%': { transform: 'perspective(1000px) rotateY(90deg)', opacity: '0' },
-                '100%': { transform: 'perspective(1000px) rotateY(0deg)', opacity: '1' },
-              },
-              'bounce-small': {
-                '0%, 100%': { transform: 'translateY(-5%)' },
-                '50%': { transform: 'translateY(0)' },
-              },
-              'slide-x': {
-                '0%, 100%': { transform: 'translateX(0)' },
-                '50%': { transform: 'translateX(20px)' },
-              },
-              shimmer: {
-                '0%': { transform: 'translateX(-100%)' },
-                '100%': { transform: 'translateX(100%)' }
-              },
-              'spin-fall': {
-                '0%': { transform: 'rotate(0deg) translateY(0)', opacity: '1' },
-                '20%': { transform: 'rotate(-5deg) translateY(-40px)', opacity: '1' },
-                '100%': { transform: 'rotate(720deg) translateY(120vh)', opacity: '0' }
-              },
-              'pop-in': {
-                '0%': { transform: 'scale(0)', opacity: '0' },
-                '60%': { transform: 'scale(1.2)', opacity: '1' },
-                '100%': { transform: 'scale(1)', opacity: '1' }
-              }
-            }
-          },
-        },
-      };
-    </script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700&display=swap');
-      
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      
-      .casino-font {
-        font-family: 'Playfair Display', serif;
-      }
-
-      /* Base card back styles for pattern reuse */
-      .card-pattern {
-         background-size: 20px 20px;
-         background-position: center;
-      }
-
-      /* Standard Card Back - Matching the image (Dark Blue with Indigo/Lighter pattern) */
-      .card-back {
-        background: 
-            radial-gradient(circle, #3730a3 2px, transparent 2.5px) 0 0,
-            radial-gradient(circle, #3730a3 2px, transparent 2.5px) 10px 10px;
-        background-color: #1e1b4b; /* slate-950/indigo-950 tone */
-        background-size: 20px 20px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-      }
-
-      .card-back-jackpot {
-        background: 
-            radial-gradient(circle, #991b1b 2px, transparent 2.5px) 0 0,
-            radial-gradient(circle, #991b1b 2px, transparent 2.5px) 10px 10px;
-        background-color: #450a0a;
-        background-size: 20px 20px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-      }
-
-      .card-back-gold {
-         background: 
-            linear-gradient(135deg, #a16207 25%, transparent 25%) -10px 0,
-            linear-gradient(225deg, #a16207 25%, transparent 25%) -10px 0,
-            linear-gradient(315deg, #a16207 25%, transparent 25%),
-            linear-gradient(45deg, #a16207 25%, transparent 25%);
-        background-size: 20px 20px;
-        background-color: #ca8a04;
-        box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 10px rgba(234, 179, 8, 0.5);
-      }
-      
-      .animate-spin-fall {
-        animation: spin-fall 0.8s ease-in forwards;
-        animation-delay: 0.6s; /* Slight delay so user sees the card first */
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0"
-  }
-}
-</script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>streak8</title>
+<link rel="icon" href="icons/icon128.png">
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/streak8-core.js"></script>
+<script src="js/streak8-firebase.js"></script>
+<script src="js/streak8-ui.js" defer></script>
 </head>
-  <body class="bg-slate-900 text-white overflow-x-hidden">
-    <div id="root"></div>
-  </body>
+<body>
+<div id="app">
+
+  <!-- Splash: NTH Star -> game logo -> tutorial -->
+  <div id="splash" class="splash">
+    <div class="splash-stage" id="splashStage1">
+      <div class="nth-wrap">
+        <div class="nth-ring"></div>
+        <div class="nth-badge"><img src="images/nth-star-logo.webp" alt="NTH Star"></div>
+      </div>
+      <div class="nth-caption">NTH STAR</div>
+    </div>
+    <div class="splash-stage hidden" id="splashStage2">
+      <div class="splash-logo">
+        <div class="splash-title">STREAK<span>8</span></div>
+      </div>
+    </div>
+    <div class="splash-skip" id="splashSkipHint">click to skip</div>
+  </div>
+
+  <!-- Return to NTH STAR: visible during gameplay, same tab.
+       Mid-game return loses the in-progress hand; balance, leaderboard
+       name and local stats persist in localStorage. -->
+  <div class="s8-return">
+    <a href="https://nthstargames.com" aria-label="Back to NTH STAR home">← NTH STAR</a>
+  </div>
+
+  <!-- Header -->
+  <header class="hud">
+    <div class="hud-jackpot" id="jackpotBox">
+      <span class="hud-icon gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      </span>
+      <span class="hud-label">Hand Jackpot</span>
+      <span class="hud-value gold" id="jackpotValue">$10,000</span><span class="halved-tag hidden" id="halvedTag">HALVED</span>
+    </div>
+    <div class="hud-right">
+      <div class="hud-balance">
+        <span class="hud-label">Balance:</span>
+        <span class="hud-value green" id="balanceValue">$0</span>
+      </div>
+      <button class="hud-iconbtn" id="lbBtn" title="Leaderboard" aria-label="Leaderboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      </button>
+      <button class="hud-help" id="helpBtn" title="How to play" aria-label="How to play">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main board -->
+  <main class="board">
+    <div class="base-row">
+      <span class="base-label">Base Card</span>
+      <div class="base-card-wrap">
+        <div id="baseCard"></div>
+        <div class="base-tag" id="baseTag">Highest</div>
+      </div>
+    </div>
+
+    <div class="panels-wrap">
+      <div class="panels">
+        <section class="panel qualifier">
+          <span class="panel-tag slate">Qualifier Round</span>
+          <div class="slots" id="qualSlots"></div>
+        </section>
+
+        <section class="panel run">
+          <span class="panel-tag goldtag">Jackpot Run</span>
+          <div class="slots" id="runSlots"></div>
+        </section>
+      </div>
+      <!-- Controls: bottom row on narrow screens (normal flow, after panels),
+           vertical rail left of the panels on wide screens (see rail CSS) -->
+      <footer class="controls" id="controls">
+        <button class="ctl-btn higher" id="btnHigher">
+          <span class="ctl-ring"></span>
+          <span class="ctl-face">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+            <em>Higher</em>
+          </span>
+        </button>
+        <div class="ctl-mid">
+          <button class="ctl-btn mid hidden" id="btnMiddle"><span class="ctl-face"><em>Swap $100</em></span></button>
+          <div class="ctl-hint" id="ctlHint"></div>
+        </div>
+        <button class="ctl-btn lower" id="btnLower">
+          <span class="ctl-ring"></span>
+          <span class="ctl-face">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <em>Lower</em>
+          </span>
+        </button>
+        <button class="start-btn hidden" id="btnStart">Start Hand</button>
+      </footer>
+    </div>
+  </main>
+
+  <!-- Outcome modal -->
+  <div class="overlay hidden" id="modal">
+    <div class="modal" id="modalCard">
+      <div class="modal-icon" id="modalIcon"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-sub" id="modalSub"></p>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <!-- Help -->
+  <div class="overlay hidden" id="help">
+    <div class="help-card">
+      <button class="help-close" id="helpClose" aria-label="Close help">&times;</button>
+      <h2>How to Play</h2>
+      <p>Guess if the next card is <strong class="t-green">Higher</strong> or <strong class="t-red">Lower</strong> than the current one.</p>
+      <ul>
+        <li>Survive the first 4 cards (<strong>Qualifier</strong>) to enter the <strong class="t-gold">Jackpot Run</strong>.</li>
+        <li>In the Qualifier, a wrong guess lets you <strong class="t-orange">Continue</strong> by halving the jackpot.</li>
+        <li>In the <strong class="t-gold">Jackpot Run</strong>, any wrong guess ends the hand — and costs you the current tier.</li>
+        <li>You can <strong class="t-purple">Cash Out</strong> safely from the 6th card onward.</li>
+        <li>A tie (<strong>push</strong>) halves the jackpot but you advance.</li>
+      </ul>
+      <p class="help-tip">Tip: swap a bad base card for $100 before your first guess. Aces can't go higher, 2s can't go lower.</p>
+      <button class="watchbtn" id="helpWatchDemo">▶&nbsp; Watch the winning demo</button>
+      <button class="help-ok" id="helpOk">Got it</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="overlay hidden" id="lbModal">
+    <div class="lb-card">
+      <button class="help-close" id="lbClose" aria-label="Close leaderboard">&times;</button>
+      <div class="lb-head">
+        <img class="lb-chip" src="images/streak8-chip.svg" alt="streak8">
+        <h2>Top 10 <span class="lb-sub" id="lbSub">local board</span></h2>
+      </div>
+      <div class="lb-player">Playing as <strong id="lbName"></strong></div>
+      <div class="lb-editor hidden" id="lbEditor">
+        <div class="lb-once" id="lbOnceNote">Pick your leaderboard name — one time only.</div>
+        <input id="lbNameInput" maxlength="16" placeholder="Your name" autocomplete="off">
+        <button id="lbSaveName">Save</button>
+        <div class="lb-err hidden" id="lbNameErr"></div>
+      </div>
+      <div class="lb-filters">
+        <label for="lbCountryFilter">Show</label>
+        <select id="lbCountryFilter" aria-label="Filter leaderboard by country"></select>
+      </div>
+      <ol class="lb-list" id="lbList"></ol>
+      <div class="lb-rank" id="lbRank"></div>
+      <div class="lb-foot">Top 200 players across everyone.<br>Ties broken by fewest games played.</div>
+    </div>
+  </div>
+
+  <canvas id="confettiCanvas" class="hidden"></canvas>
+
+  <!-- Winning demo (v1.6.0): 12-beat scripted jackpot win -->
+  <div class="demo-overlay hidden" id="demoOverlay">
+    <div class="demo-tapcatch" id="demoTapCatch"></div>
+    <div class="demo-bar">
+      <span class="demo-title">▶&nbsp; Watch&nbsp; How a jackpot is won</span>
+      <span class="demo-steps" id="demoSteps">STEP 1 OF 12</span>
+      <button class="demo-skip" id="demoSkip">Skip</button>
+    </div>
+    <div class="demo-text as-pop pos-mid" id="demoText"><p id="demoTextP"></p></div>
+    <div class="demo-infoveil hidden" id="demoInfoVeil">
+      <div class="demo-infomodal">
+        <h2>Now it&rsquo;s for real!</h2>
+        <p>Cash out after the first Jackpot Run tier, or keep going for bigger rewards.</p>
+        <button id="demoInfoGo">Continue</button>
+      </div>
+    </div>
+    <div class="demo-winveil hidden" id="demoWinVeil">
+      <div class="demo-winmodal">
+        <h1>JACKPOT!</h1>
+        <div class="demo-winamt">+$5,000</div>
+        <button id="demoWinGo">Play</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
 </html>
