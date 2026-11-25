@@ -125,5 +125,88 @@
 </head>
   <body class="bg-slate-900 text-white overflow-x-hidden">
     <div id="root"></div>
-  </body>
+  <!-- NTH STAR fullscreen + fit (rollout v1): standalone games get a
+     fullscreen toggle; while fullscreen (or the immersive fallback is
+     active), if the game is taller than the screen it is scaled to fit
+     instead of scrolling. Normal play is untouched. Embedded play is
+     left to the host page. -->
+<style>
+#nthstar-fs-btn{position:fixed;right:calc(10px + env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));z-index:2147483000;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:rgba(20,24,40,.72);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);-webkit-tap-highlight-color:transparent;padding:0}
+#nthstar-fs-btn:active{transform:scale(.94)}
+html.nthstar-immersive,html.nthstar-immersive body{height:100dvh;overflow:hidden}
+</style>
+<script>
+(function () {
+  var FIT_ENABLED = true; // rollout audit sets this per game (off for canvas/pointer-sensitive games)
+  if (window.parent !== window) return;
+  try { if (new URLSearchParams(window.location.search).get('mode') === 'daily') return; } catch (e) {}
+  if (document.getElementById('nthstar-fs-btn')) return;
+  var btn = document.createElement('button');
+  btn.id = 'nthstar-fs-btn';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Toggle fullscreen');
+  btn.textContent = '\u26F6';
+  document.body.appendChild(btn);
+  var immersive = false;
+  function isFs() { return !!document.fullscreenElement || immersive; }
+  function target() {
+    var root = document.getElementById('root') || document.getElementById('app');
+    if (root && root.firstElementChild) return root.firstElementChild;
+    if (root) return root;
+    var m = document.querySelector('main');
+    if (m) return m;
+    var g = document.querySelector('.game');
+    if (g) return g;
+    return document.body ? document.body.firstElementChild : null;
+  }
+  function fit() {
+    var el = target();
+    if (!el || !el.style) return;
+    if (!isFs() || !FIT_ENABLED) { if (el.style.transform) el.style.transform = ''; return; }
+    el.style.transform = '';
+    var w = el.offsetWidth, h = el.offsetHeight;
+    if (!w || !h) return;
+    var s = Math.min(1, (window.innerHeight - 2) / h, window.innerWidth / w);
+    if (s < 0.999) {
+      el.style.transformOrigin = 'center top';
+      el.style.transform = 'scale(' + s + ')';
+    }
+  }
+  function lockImmersive() {
+    immersive = true;
+    document.documentElement.classList.add('nthstar-immersive');
+    fit();
+  }
+  function enter() {
+    var el = document.documentElement;
+    if (el.requestFullscreen) {
+      try {
+        var p = el.requestFullscreen({ navigationUI: 'hide' });
+        if (p && p.catch) p.catch(function () {
+          try { var p2 = el.requestFullscreen(); if (p2 && p2.catch) p2.catch(lockImmersive); }
+          catch (e) { lockImmersive(); }
+        });
+      } catch (e) {
+        try { var p3 = el.requestFullscreen(); if (p3 && p3.catch) p3.catch(lockImmersive); }
+        catch (e2) { lockImmersive(); }
+      }
+    } else lockImmersive();
+  }
+  function exit() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    if (immersive) {
+      immersive = false;
+      document.documentElement.classList.remove('nthstar-immersive');
+      fit();
+    }
+  }
+  btn.addEventListener('click', function () { isFs() ? exit() : enter(); });
+  document.addEventListener('fullscreenchange', fit);
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+  setInterval(fit, 1000);
+})();
+</script>
+
+</body>
 </html>
